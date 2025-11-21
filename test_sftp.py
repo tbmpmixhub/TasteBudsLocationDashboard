@@ -11,6 +11,7 @@ KEY_PATH = os.getenv("SFTP_KEY_PATH") # file exported from PuTTYgen in the proje
 def test_sftp():
     try:
         print("Loading key...")
+        # Grab the private key
         key = paramiko.RSAKey.from_private_key_file(KEY_PATH)
 
         print("Connecting to SFTP...")
