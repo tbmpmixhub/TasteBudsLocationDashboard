@@ -1,0 +1,43 @@
+name: Daily Toast Ingest
+
+on:
+  # Run every day at 08:00 UTC (adjust as needed)
+  schedule:
+    - cron: '0 8 * * *'
+  # Allow manual runs from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  ingest:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Create SFTP key file
+        run: |
+          echo "$TOAST_SFTP_PRIVATE_KEY" > toast_sftp_key
+          chmod 600 toast_sftp_key
+        env:
+          TOAST_SFTP_PRIVATE_KEY: ${{ secrets.TOAST_SFTP_PRIVATE_KEY }}
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements.txt
+
+      - name: Run SFTP ingest for all stores
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          SFTP_HOST: ${{ secrets.SFTP_HOST }}
+          SFTP_USERNAME: ${{ secrets.SFTP_USERNAME }}
+          # SFTP_KEY_PATH is what your script reads with os.getenv
+          SFTP_KEY_PATH: toast_sftp_key
+        run: |
+          python sftp_ingest.py
