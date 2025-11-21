@@ -49,7 +49,7 @@ def ingest_all_stores_for_date(date_str: str):
             # Locate the two CSVs we care about
             item_remote = None
             mod_remote = None
-
+            # Locate the two CSVs we care about
             for fname in files:
                 lower = fname.lower()
                 if "itemselectiondetails" in lower:
