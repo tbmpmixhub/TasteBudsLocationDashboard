@@ -2,3 +2,4 @@
 *.pem
 __pycache__/
 csv_files
+test_db_upload.py
