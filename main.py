@@ -1,9 +1,11 @@
 import streamlit as st
 import pandas as pd
-import utils
 from PIL import Image
 import sys
 import traceback
+from dotenv import load_dotenv
+load_dotenv()
+import utils
 
 
 # Configure Streamlit page
