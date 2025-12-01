@@ -3,7 +3,7 @@ name: Daily Toast Ingest
 on:
   # Run file for ingesting Toast data every day at 14:00 UTC (8 AM CST)
   schedule:
-    - cron: '0 14 * * *'
+    - cron: '0 12 * * *'
   # Allow manual runs from the Actions tab
   workflow_dispatch:
 
