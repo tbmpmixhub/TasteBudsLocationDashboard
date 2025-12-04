@@ -7,3 +7,4 @@ toast_sftp_key
 *.ppk
 *.pem
 *.key
+test.py
