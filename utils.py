@@ -85,6 +85,20 @@ def save_report_data(date, location, report_df):
     if report_df.empty:
         return
 
+    # Skip excluded locations (normalize for safety)
+    normalized_location = location.strip().lower()
+    excluded_locations = {
+        "8301 oak st",
+        "8301 oak street",  # include this because of past string issues
+    }
+
+    if normalized_location in excluded_locations:
+        print(f"⚠️ Skipping save for excluded location: {location!r}")
+        return
+    
+    # TEMP: add this line just for testing
+    print(">>> REACHED DB BLOCK <<<")
+    
     try:
         with engine.begin() as conn:  # Using transaction
             # Only delete existing data for this specific date and location combination
