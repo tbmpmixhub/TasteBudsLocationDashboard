@@ -40,4 +40,4 @@ jobs:
           # SFTP_KEY_PATH is what your script reads with os.getenv
           SFTP_KEY_PATH: toast_sftp_key
         run: |
-          python sftp_ingest_stores.py
+          python ingest_stores_pt2.py
