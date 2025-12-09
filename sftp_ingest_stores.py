@@ -6,7 +6,8 @@ import os
 import paramiko
 import utils
 import pandas as pd
-from datetime import datetime, timedelta
+import datetime
+from datetime import timedelta
 
 HOST = os.getenv("SFTP_HOST")
 USERNAME = os.getenv("SFTP_USERNAME")
