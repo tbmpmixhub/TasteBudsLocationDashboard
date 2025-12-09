@@ -6,8 +6,7 @@ import os
 import paramiko
 import utils
 import pandas as pd
-import datetime
-from datetime import timedelta
+from datetime import datetime, timedelta, timezone
 
 HOST = os.getenv("SFTP_HOST")
 USERNAME = os.getenv("SFTP_USERNAME")
@@ -15,7 +14,7 @@ KEY_PATH = os.getenv("SFTP_KEY_PATH")
 
 # Function to calculate the date string for yesterday
 def get_yesterday_string():
-    yesterday = datetime.now(datetime.timezone.utc) - timedelta(days=1)
+    yesterday = datetime.now(timezone.utc) - timedelta(days=1)
     return yesterday.strftime("%Y%m%d")
 # Change this to the business date you want to ingest: YYYYMMDD
 DATE_STR = get_yesterday_string()  # example
