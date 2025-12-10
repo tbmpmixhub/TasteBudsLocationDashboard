@@ -12,7 +12,7 @@ import utils
 st.set_page_config(
     page_title="Sales Count Report",
     layout="wide",
-    initial_sidebar_state="expanded"
+    initial_sidebar_state="collapsed"
 )
 # Disable the sidebar for now with custom CSS
 st.markdown("""
