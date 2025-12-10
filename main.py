@@ -14,6 +14,25 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="expanded"
 )
+# Disable the sidebar for now with custom CSS
+st.markdown("""
+<style>
+    /* Completely hide sidebar */
+    section[data-testid="stSidebar"] {
+        display: none !important;
+    }
+
+    /* Hide the sidebar toggle button */
+    button[data-testid="collapsedControl"] {
+        display: none !important;
+    }
+
+    /* Expand main content to full width */
+    div[data-testid="stAppViewContainer"] > .main {
+        margin-left: 0rem;
+    }
+</style>
+""", unsafe_allow_html=True)
 
 # Initialize session state
 if 'initialization_completed' not in st.session_state:
@@ -328,12 +347,12 @@ except Exception as e:
     st.error(f"Error loading logo: {str(e)}")
 
 # --- TOP CONTROL BAR ---
-st.markdown("---")
+st.markdown("<hr style='margin: 0.5rem 0 1rem 0;'>", unsafe_allow_html=True)
 
 controls = st.container()
 
 with controls:
-    column1, column2, column3 = st.columns([2, 2, 2])
+    column1, column2, column3 = st.columns([3, 2, 2])
 
     # Location dropdown (MAIN)
     with column1:
