@@ -69,6 +69,7 @@ def ingest_all_stores_for_date_once(date_str: str, processed_stores: set[str]) -
           * has both CSVs for the date
     Returns the set of all store folders seen on SFTP (for this date run).
     """
+    print(f"\n📡 ingest_all_stores_for_date_once() START for {date_str}", flush=True)
     # Make sure all env vars are set
     if not HOST or not USERNAME or not KEY_PATH:
         raise RuntimeError("SFTP env vars missing: SFTP_HOST, SFTP_USERNAME, SFTP_KEY_PATH")
@@ -88,6 +89,7 @@ def ingest_all_stores_for_date_once(date_str: str, processed_stores: set[str]) -
     try:
         # List all store folders on SFTP
         store_folders = sftp.listdir(".")
+        print("📂 SFTP ROOT CONTENTS:", store_folders, flush=True)
         # Set all_store_folders equals to the set of store_folders found
         all_store_folders = set(store_folders)
         print("Found store folders:", store_folders)
@@ -172,6 +174,7 @@ def ingest_all_stores_for_date_once(date_str: str, processed_stores: set[str]) -
 # ---- MAIN RETRY LOOP ----
 
 def main():
+    print("🚀 ENTERED main()", flush=True)
     date_str = DATE_STR
     # Set processed_stores by loading from JSON file
     processed_stores = load_processed_stores()

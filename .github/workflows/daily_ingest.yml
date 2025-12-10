@@ -37,7 +37,7 @@ jobs:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
           SFTP_HOST: ${{ secrets.SFTP_HOST }}
           SFTP_USERNAME: ${{ secrets.SFTP_USERNAME }}
-          # SFTP_KEY_PATH is what your script reads with os.getenv
           SFTP_KEY_PATH: toast_sftp_key
+          PYTHONUNBUFFERED: 1
         run: |
-          python ingest_stores_pt2.py
+          python -u ingest_stores_pt2.py
