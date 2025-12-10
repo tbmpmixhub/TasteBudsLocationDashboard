@@ -327,6 +327,51 @@ try:
 except Exception as e:
     st.error(f"Error loading logo: {str(e)}")
 
+# --- TOP CONTROL BAR ---
+st.markdown("---")
+
+controls = st.container()
+
+with controls:
+    column1, column2, column3 = st.columns([2, 2, 2])
+
+    # Location dropdown (MAIN)
+    with column1:
+        if st.session_state.locations:
+            selected_location = st.selectbox(
+                "Location",
+                options=st.session_state.locations,
+                index=st.session_state.locations.index(
+                    st.session_state.selected_location
+                ) if st.session_state.selected_location and st.session_state.selected_location in st.session_state.locations else 0
+            )
+            st.session_state.selected_location = selected_location
+        else:
+            selected_location = None
+            st.warning("No locations available")
+
+    # Date picker (MAIN)
+    with column2:
+        if dates:
+            selected_date = st.date_input(
+                "Date",
+                value=dates[-1],  # Default to most recent date
+                min_value=dates[0],
+                max_value=dates[-1]
+            )
+        else:
+            selected_date = None
+            st.warning("No dates available")
+
+    # Interval toggle (MAIN)
+    with column3:
+        selected_interval = st.radio(
+            "Time Interval",
+            ["1 Hour", "30 Minutes"],
+            index=0,
+            horizontal=True
+        )
+# ---- END TOP CONTROL BAR ----
 # Display report header
 if selected_location:
     st.markdown(f'<h1 class="report-title">{selected_location}</h1>', unsafe_allow_html=True)
