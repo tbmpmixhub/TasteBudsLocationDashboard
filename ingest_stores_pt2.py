@@ -90,6 +90,8 @@ def ingest_all_stores_for_date_once(date_str: str, processed_stores: set[str]) -
         # List all store folders on SFTP
         store_folders = sftp.listdir(".")
         print("📂 SFTP ROOT CONTENTS:", store_folders, flush=True)
+        # Remove Oak St folder that will never have data
+        store_folders.remove("217184") if "217184" in store_folders else None
         # Set all_store_folders equals to the set of store_folders found
         all_store_folders = set(store_folders)
         print("Found store folders:", store_folders)
