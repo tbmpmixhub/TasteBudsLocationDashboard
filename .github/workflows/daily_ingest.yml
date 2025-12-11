@@ -1,7 +1,7 @@
 name: Daily Toast Ingest
 
 on:
-  # Run file for ingesting Toast data every day at 14:00 UTC (8 AM CST)
+  # Run file for ingesting Toast data every day at 12:00 UTC (6 AM CST)
   schedule:
     - cron: '0 12 * * *'
   # Allow manual runs from the Actions tab
