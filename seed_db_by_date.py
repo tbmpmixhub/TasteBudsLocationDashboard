@@ -12,8 +12,8 @@ BASE_DIR = Path(r"C:\Users\EvanLoria\TasteBudsLocationDashboard\csv_files\ToastT
 
 # Set your date range here
 # Example call => date(2025, 11, 19) to date(2025, 11, 23)
-start_date = date(2025, 11, 19)
-end_date   = date(2025, 11, 23)
+start_date = date(2025, 12, 1)
+end_date   = date(2025, 12, 23)
 
 print(f"\n➡ Filtering folders from {start_date} to {end_date}\n")
 
@@ -45,7 +45,7 @@ for folder_path, item_csv_path in item_map.items():
 
     # Check date range
     if not (start_date <= folder_date <= end_date):
-        print(f"⏭ Skipping {folder_path} (date {folder_date} outside range)")
+       ## print(f"⏭ Skipping {folder_path} (date {folder_date} outside range)")
         continue
 
     # Valid pair
