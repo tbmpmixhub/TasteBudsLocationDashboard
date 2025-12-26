@@ -1,4 +1,4 @@
-name: Daily Toast Ingest
+name: Daily Toast Ingest2
 
 on:
   schedule:
