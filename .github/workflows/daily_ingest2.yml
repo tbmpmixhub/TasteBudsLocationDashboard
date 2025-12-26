@@ -27,7 +27,7 @@ jobs:
         run: |
           doctl databases firewalls append ${{ secrets.DO_DB_CLUSTER_ID }} \
             --rule "ip_addr:${{ steps.ip.outputs.ip }}/32"
-      # ---- End allowlist ----
+
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
