@@ -25,6 +25,10 @@ SCRIPT_DIR = Path(__file__).resolve().parent
 TARGET_DATE_STR = os.getenv("TARGET_DATE_STR", "20251224")
 # ----------------------------------------------
 
+def clear_processed_stores_file():
+    if PROCESSED_STORES_FILE.exists():
+        PROCESSED_STORES_FILE.unlink()
+        print(f"🧹 Cleared processed stores file: {PROCESSED_STORES_FILE.name}")
 
 # Use a per-date processed file so backfills don't conflict with other runs
 PROCESSED_STORES_FILE = SCRIPT_DIR / f"processed_stores_{TARGET_DATE_STR}.json"
@@ -170,6 +174,8 @@ def main():
     remaining = all_stores_seen - processed_stores
     if remaining:
         print(f"\n⚠️ Finished retries with unprocessed stores for {date_str}: {sorted(remaining)}")
+        # Always clear processed stores file after run
+    clear_processed_stores_file()
 
 
 if __name__ == "__main__":
