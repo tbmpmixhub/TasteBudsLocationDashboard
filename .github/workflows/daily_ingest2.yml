@@ -30,8 +30,7 @@ jobs:
             --rule "ip_addr:${{ steps.ip.outputs.ip }}/32"
 
           RULE_UUID=$(doctl databases firewalls list ${{ secrets.DO_DB_CLUSTER_ID }} \
-            --format "UUID,Value" --no-header \
-            | awk '$2=="ip_addr:${{ steps.ip.outputs.ip }}/32"{print $1; exit}')
+            | awk 'NR>1 && $4=="ip_addr" && $5=="${{ steps.ip.outputs.ip }}/32" {print $1; exit}')
 
           if [ -z "$RULE_UUID" ]; then
             echo "Failed to locate firewall rule UUID"
@@ -39,6 +38,7 @@ jobs:
           fi
 
           echo "rule_uuid=$RULE_UUID" >> $GITHUB_OUTPUT
+
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
