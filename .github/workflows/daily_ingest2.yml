@@ -51,3 +51,24 @@ jobs:
           PYTHONUNBUFFERED: 1
         run: |
           python ingest_stores_pt2.py
+
+      - name: Remove allowlist runner IP for DO Postgres
+        if: always()
+        run: |
+          sudo apt-get update -y
+          sudo apt-get install -y jq
+
+          RULE_UUID=$(doctl databases firewalls list ${{ secrets.DO_DB_CLUSTER_ID }} -o json \
+            | jq -r '.[] | select(.type=="ip_addr" and .value=="${{ steps.ip.outputs.ip }}/32") | .uuid')
+
+          if [ -n "$RULE_UUID" ] && [ "$RULE_UUID" != "null" ]; then
+            doctl databases firewalls remove ${{ secrets.DO_DB_CLUSTER_ID }} --uuid "$RULE_UUID"
+            echo "Removed firewall rule UUID: $RULE_UUID"
+          else
+            echo "No matching firewall rule found for ${{ steps.ip.outputs.ip }}/32"
+          fi
+
+      - name: Delete SFTP key file
+        if: always()
+        run: rm -f toast_sftp_key
+
