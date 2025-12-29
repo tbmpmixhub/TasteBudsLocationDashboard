@@ -24,10 +24,21 @@ jobs:
         run: echo "ip=$(curl -s https://api.ipify.org)" >> $GITHUB_OUTPUT
 
       - name: Allowlist runner IP for DO Postgres
+        id: fw
         run: |
           doctl databases firewalls append ${{ secrets.DO_DB_CLUSTER_ID }} \
             --rule "ip_addr:${{ steps.ip.outputs.ip }}/32"
 
+          RULE_UUID=$(doctl databases firewalls list ${{ secrets.DO_DB_CLUSTER_ID }} \
+            --format "UUID,Value" --no-header \
+            | awk '$2=="ip_addr:${{ steps.ip.outputs.ip }}/32"{print $1; exit}')
+
+          if [ -z "$RULE_UUID" ]; then
+            echo "Failed to locate firewall rule UUID"
+            exit 1
+          fi
+
+          echo "rule_uuid=$RULE_UUID" >> $GITHUB_OUTPUT
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
@@ -60,8 +71,4 @@ jobs:
         if: always()
         run: |
           doctl databases firewalls remove ${{ secrets.DO_DB_CLUSTER_ID }} \
-            --rule "ip_addr:${{ steps.ip.outputs.ip }}/32"
-
-      - name: Delete SFTP key file
-        if: always()
-        run: rm -f toast_sftp_key
+            --uuid "${{ steps.fw.outputs.rule_uuid }}"
