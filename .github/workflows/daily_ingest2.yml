@@ -1,8 +1,8 @@
-name: Daily Toast Ingest2
+name: Daily Toast Ingest
 
 on:
   schedule:
-    - cron: '0 12 * * *'  # 12:00 UTC (6 AM CST)
+    - cron: "0 12 * * *"   # 12:00 UTC (6 AM CST)
   workflow_dispatch:
 
 jobs:
@@ -13,7 +13,11 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      # ---- Allowlist runner's IP in DO Managed DB ----
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
       - name: Install doctl
         uses: digitalocean/action-doctl@v2
         with:
@@ -24,39 +28,21 @@ jobs:
         run: echo "ip=$(curl -s https://api.ipify.org)" >> $GITHUB_OUTPUT
 
       - name: Allowlist runner IP for DO Postgres
-        id: fw
         run: |
           doctl databases firewalls append ${{ secrets.DO_DB_CLUSTER_ID }} \
             --rule "ip_addr:${{ steps.ip.outputs.ip }}/32"
 
-          RULE_UUID=$(doctl databases firewalls list ${{ secrets.DO_DB_CLUSTER_ID }} \
-            | awk 'NR>1 && $4=="ip_addr" && $5=="${{ steps.ip.outputs.ip }}/32" {print $1; exit}')
-
-          if [ -z "$RULE_UUID" ]; then
-            echo "Failed to locate firewall rule UUID"
-            exit 1
-          fi
-
-          echo "rule_uuid=$RULE_UUID" >> $GITHUB_OUTPUT
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
-
       - name: Create SFTP key file
         run: |
-          echo "$TOAST_SFTP_PRIVATE_KEY" > toast_sftp_key
+          echo "${{ secrets.TOAST_SFTP_PRIVATE_KEY }}" > toast_sftp_key
           chmod 600 toast_sftp_key
-        env:
-          TOAST_SFTP_PRIVATE_KEY: ${{ secrets.TOAST_SFTP_PRIVATE_KEY }}
 
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          python -m pip install -r requirements.txt
+          pip install -r requirements.txt
 
-      - name: Run SFTP ingest for all stores
+      - name: Run Toast SFTP ingest
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
           SFTP_HOST: ${{ secrets.SFTP_HOST }}
@@ -64,11 +50,4 @@ jobs:
           SFTP_KEY_PATH: toast_sftp_key
           PYTHONUNBUFFERED: 1
         run: |
-          python -u ingest_stores_pt2.py
-
-      # ---- Cleanup ----
-      - name: Remove allowlist runner IP for DO Postgres
-        if: always()
-        run: |
-          doctl databases firewalls remove ${{ secrets.DO_DB_CLUSTER_ID }} \
-            --uuid "${{ steps.fw.outputs.rule_uuid }}"
+          python ingest_stores_pt2.py
