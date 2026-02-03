@@ -392,6 +392,9 @@ def calculate_interval_counts(interval_items, interval_mods):
             try:
                 items_df['PLU'] = pd.to_numeric(items_df['PLU'], errors='coerce')
                 
+                # TEMP debug for new PLU
+                print("82445 item matches:", items_df[items_df["PLU"] == 82445]["Qty"].sum())
+
                 # Count each category based on PLU, using Qty values
                 for category, plus in plu_mapping.items():
                     category_counts = items_df[
