@@ -23,8 +23,8 @@ SCRIPT_DIR = Path(__file__).resolve().parent
 PROCESSED_STORES_FILE = SCRIPT_DIR / "processed_stores.json"
 
 # ---- SET YOUR DATE RANGE HERE ----
-start_date = date(2025, 12, 1)
-end_date   = date(2025, 12, 23)
+start_date = date(2026, 2, 1)
+end_date   = date(2026, 2, 3)
 # ---------------------------------
 
 
