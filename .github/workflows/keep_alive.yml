@@ -14,5 +14,6 @@ jobs:
       - run: |
           git config user.email "action@github.com"
           git config user.name "GitHub Action"
+          git checkout -b keepalive 2>/dev/null || git checkout keepalive
           git commit --allow-empty -m "Keep Alive Commit"
-          git push
+          git push origin keepalive
