@@ -3,7 +3,8 @@ on:
   schedule:
     - cron: "25 * * * *"
 jobs:
-  keepalive:
+  - cron: "0 0 */50 * *"
+  workflow_dispatch:
     name: Keepalive Workflow
     runs-on: ubuntu-latest
     permissions:
