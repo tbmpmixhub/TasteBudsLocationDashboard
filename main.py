@@ -7,7 +7,23 @@ from pathlib import Path
 from dotenv import load_dotenv
 load_dotenv()
 import utils
+import time 
+from token_server import token_store
 
+load_dotenv()
+import utils
+import time 
+from token_server import token_store
+
+def check_token():
+    token = st.query_params.get("token", "")
+    now = time.time()
+    if not token or token not in token_store or token_store[token] < now:
+        st.error("403 - Access Forbidden")
+        st.stop()
+    del token_store[token]
+
+check_token()
 
 # Configure Streamlit page
 st.set_page_config(
