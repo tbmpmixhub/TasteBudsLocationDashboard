@@ -51,8 +51,8 @@ async def websocket_proxy(websocket: WebSocket):
                 async for msg in websocket.iter_bytes():
                     await ws.send(msg)
             await asyncio.gather(forward(), backward())
-    except (WebSocketDisconnect, Exception):
-        pass
+    except (WebSocketDisconnect, Exception) as e:
+        print(f"WebSocket proxy error: {e}")
 
 @app.api_route("/{path:path}", methods=["GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD", "PATCH"])
 async def proxy(request: Request, path: str):
