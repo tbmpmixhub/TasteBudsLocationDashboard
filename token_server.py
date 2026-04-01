@@ -40,7 +40,9 @@ async def websocket_proxy(websocket: WebSocket):
     await websocket.accept()
     uri = "ws://localhost:8501/_stcore/stream"
     try:
+        print(f"Attempting to connect to {uri}")
         async with websockets.connect(uri) as ws:
+            print("Connected to Streamlit WebSocket")
             async def forward():
                 async for msg in ws:
                     if isinstance(msg, bytes):
@@ -52,7 +54,7 @@ async def websocket_proxy(websocket: WebSocket):
                     await ws.send(msg)
             await asyncio.gather(forward(), backward())
     except (WebSocketDisconnect, Exception) as e:
-        print(f"WebSocket proxy error: {e}")
+        print(f"WebSocket proxy error: {type(e).__name__}: {e}")
 
 @app.api_route("/{path:path}", methods=["GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD", "PATCH"])
 async def proxy(request: Request, path: str):
