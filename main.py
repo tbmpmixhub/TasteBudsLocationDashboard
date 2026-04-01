@@ -3,6 +3,7 @@ import pandas as pd
 from PIL import Image
 import sys
 import traceback
+from pathlib import Path
 from dotenv import load_dotenv
 load_dotenv()
 import utils
@@ -341,7 +342,7 @@ if items_file and modifiers_file:
 
 # Display logo
 try:
-    logo = Image.open('attached_assets/image_1740704103897.png')
+    logo = Image.open(Path(__file__).parent / 'attached_assets/image_1740704103897.png')
     st.image(logo, width=150)
 except Exception as e:
     st.error(f"Error loading logo: {str(e)}")
