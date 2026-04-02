@@ -354,7 +354,10 @@ if items_file and modifiers_file:
 
 # Display logo
 try:
-    st.image(str(Path(__file__).parent / 'attached_assets/image_1740704103897.png'), width=150)
+    import base64
+    _img_path = Path(__file__).parent / 'attached_assets/image_1740704103897.png'
+    _img_b64 = base64.b64encode(_img_path.read_bytes()).decode()
+    st.markdown(f'<img src="data:image/png;base64,{_img_b64}" width="150">', unsafe_allow_html=True)
 except Exception as e:
     st.error(f"Error loading logo: {str(e)}")
 
