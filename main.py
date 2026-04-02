@@ -11,6 +11,16 @@ import utils
 load_dotenv()
 import utils
 
+import os
+
+def check_token():
+    token = st.query_params.get("token", "")
+    if token != os.environ.get("IFRAME_TOKEN", ""):
+        st.error("403 - Access Forbidden")
+        st.stop()
+
+check_token()
+
 # Configure Streamlit page
 st.set_page_config(
     page_title="Sales Count Report",
