@@ -344,8 +344,7 @@ if items_file and modifiers_file:
 
 # Display logo
 try:
-    logo = Image.open(Path(__file__).parent / 'attached_assets/image_1740704103897.png')
-    st.image(logo, width=150)
+    st.image(str(Path(__file__).parent / 'attached_assets/image_1740704103897.png'), width=150)
 except Exception as e:
     st.error(f"Error loading logo: {str(e)}")
 
